@@ -1,0 +1,10 @@
+FROM  python:slim-buster
+WORKDIR /NordeaProject
+RUN apt-get update
+RUN apt install python3-dev build-essential libpq-dev vim git -y
+RUN pip install --upgrade pip
+COPY NordeaProject/ .
+RUN pip install -r requirements.txt
+RUN git config --global user.name "Foad"
+RUN git config --global user.email "foad.mahdavih@gmail.com"
+CMD tail -f /dev/null

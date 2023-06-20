@@ -1,0 +1,50 @@
+repos:
+      - repo: https://github.com/pre-commit/pre-commit-hooks
+        rev: v4.4.0
+        hooks:
+          - id: trailing-whitespace
+          - id: end-of-file-fixer
+
+      - repo: https://github.com/psf/black
+        rev: 23.3.0
+        hooks:
+          - id: black
+
+      - repo: https://github.com/pycqa/isort
+        rev: 5.12.0
+        hooks:
+          - id: isort
+
+      - repo: local
+        hooks:
+          - id: pylint
+            name: pylint
+            entry: pylint
+            language: system
+            types: [python]
+            require_serial: true
+
+      - repo: https://github.com/pre-commit/mirrors-mypy
+        rev: v0.940
+        hooks:
+          - id: mypy
+            exclude: ^tests/
+            args: [--strict]
+
+      - repo: local
+        hooks:
+          - id: create requirements
+            name: create requirements
+            entry: sh requirements.sh
+            language: system
+            always_run: true
+            pass_filenames: false
+
+      - repo: local
+        hooks:
+          - id: pytest
+            name: pytest
+            entry: pytest
+            language: system
+            pass_filenames: false
+            always_run: true

@@ -1,0 +1,39 @@
+services:
+  app:
+    build:
+      dockerfile: Dockerfile-app
+    hostname: nordea-app
+    environment:
+      DB_HOST: 172.16.16.101
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: on-failure
+    networks:
+      network:
+        ipv4_address: 172.16.16.100
+  
+  postgres:
+    build: 
+      dockerfile: Dockerfile-db
+    environment:
+      POSTGRES_PASSWORD: test
+    restart: always
+    networks:
+      network:
+        ipv4_address: 172.16.16.101
+    volumes:
+      - ./DB-Volume:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 3s
+      retries: 3
+
+networks:
+  network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.16.16.0/24
+          gateway: 172.16.16.1
